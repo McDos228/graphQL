@@ -1,6 +1,7 @@
 const TypeTodo = require("../../types/todo");
-// const Todo = require('../../../models/Todo');
 const { Todo } = require('../../../models');
+const { combineResolvers } = require('../../../services/resolversChain');
+const { isAuth } = require('../../../services/auth/');
 
 const documentation = '"""Adds a single todo item to the database"""';
 
@@ -13,6 +14,9 @@ const mutation = `${documentation} ${mutationName} (
 
 const resolverFunction = async (parentValue, args, ctx, info) => {
   try {
+
+    console.log(args.title, 'mutation')
+
     const dbItem = await Todo.findOne({title: args.title});
     if(dbItem) throw new Error('item with this name already exsist'); 
     return await Todo.create(args);
@@ -21,6 +25,6 @@ const resolverFunction = async (parentValue, args, ctx, info) => {
   }
 };
 
-const resolver = { [mutationName]: resolverFunction };
+const resolver = { [mutationName]: combineResolvers(isAuth, resolverFunction) };
 
 module.exports = { resolver, mutation };

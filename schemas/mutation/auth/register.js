@@ -11,7 +11,7 @@ const mutationName = "register";
 const mutation = `${documentation} ${mutationName} (
     username: String
     password: String
-): String`;
+): ${TypeUser.type}`;
 
 const resolverFunction = async (parentValue, args, ctx, info) => {
   try {
@@ -27,9 +27,7 @@ const resolverFunction = async (parentValue, args, ctx, info) => {
             password: pass
         })
 
-        return {
-            username: newUser.username
-        }
+        return newUser
     }
 
   } catch (error) {

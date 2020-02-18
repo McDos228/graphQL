@@ -1,37 +1,64 @@
 const { SECRET } = require('../../config');
-const jwt = require('jsonwebtoken');
-const {} = require('../../models/');
-// const User = require('../../models/User');
+const jwt = require('jsonwebtoken');;
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
+const User = require('../../models/User');
 
-isAuth = req => {
+isAuth = async (root, args, context, info) => 
+    !context.user? new Error('You are not authorized') : null
 
-    const token = req.headers.token;
+
+jwtDecode = async token => {
     jwt.verify(token, SECRET, async (err, decode) => {
         if(err) throw err;
 
         const user = await User.findOne({username: decode.username});
         if(user) 
             return {
-                username
+               user: user.username
             }
         else
             throw new Error('You are not authorized');
-            // console.log('you are not authorized')
-
     })
-
-    // if (!req.headers.token) return res.status(401).json("You are not authorized!");
-    // jwt.verify(req.headers.token, secret, async (err, decode) => {
-    
-    //     const user = await getOne({modelName : 'User', where:{id : decode.userId}})
-    //     if(user){
-    //         req.user = decode;
-    //         return next();
-    //     }else
-    //         return res.status(401).json("Invalid token!");
-    // })
 };
 
+const loginService = async (req, res, next)=>{
+    try {
+        const {username, password} = req.body;
+
+        const user = await User.findOne({username});
+        if(!user) throw {message : 'no user found'}
+        if(bcrypt.compareSync(password, user.password)){
+            let token = jwt.sign({
+                userId: user.id,
+                username: user.username
+            }, SECRET, { expiresIn: '1w' })
+            res.json(token)
+        }      
+    } catch (error) {
+        next(error)
+    }
+}
+
+const registerService = async (req, res, next)=>{
+    try {
+        const {email, password, username} = req.body;
+
+        let pass = bcrypt.hashSync(password, salt);
+        const user = await User.create({
+            username,
+            password: pass,
+            email,
+        });
+        res.json(user.username)
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
-    isAuth
+    isAuth,
+    jwtDecode,
+    loginService,
+    registerService,
 }

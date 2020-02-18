@@ -1,4 +1,5 @@
 const APP_PORT = 4000;
+const PLAYGROUND_URL = 'http://localhost:4000/graphql';
 
 const MONGO_HOST = process.env.MONGO_HOST || "localhost";
 const MONGO_PORT = process.env.MONGO_PORT || "27017";
@@ -10,5 +11,6 @@ const SECRET = 'test-graphql-app';
 module.exports = {
     SECRET,
     APP_PORT,
-    MONGO_URL
+    MONGO_URL,
+    PLAYGROUND_URL
 }
