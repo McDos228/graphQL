@@ -5,6 +5,7 @@ const { makeExecutableSchema } = require("graphql-tools");
 const { typeDefs } = require("./types/types");
 const { context } = require('../services/context');
 const { PLAYGROUND_URL } = require('../config');
+const { formatError } = require('../errors');
 
 const resolvers = {
     Query: QueryResolvers,
@@ -17,7 +18,8 @@ const apolloServer = new ApolloServer({
     schema,
     context,
     typeDefs,
-    uploads: false,
+    formatError,
+    uploads: false,    
     playground: {
         endpoint: PLAYGROUND_URL
     },

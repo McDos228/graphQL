@@ -5,6 +5,14 @@ const errHandler = (err, req, res, next) => {
     });
 }
 
+formatError = err => {
+    return {
+        msg: err.message,
+        code: err.extensions.code
+    }
+}
+
 module.exports = {
-    errHandler
+    errHandler,
+    formatError
 }

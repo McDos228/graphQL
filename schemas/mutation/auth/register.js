@@ -3,7 +3,6 @@ const User = require('../../../models/User');
 const bcryptjs = require('bcryptjs');
 const salt = bcryptjs.genSaltSync(10);
 
-
 const documentation = '"""Return token for registred users"""';
 
 const mutationName = "register";
@@ -14,25 +13,22 @@ const mutation = `${documentation} ${mutationName} (
 ): ${TypeUser.type}`;
 
 const resolverFunction = async (parentValue, args, ctx, info) => {
-  try {
-    const user = await User.findOne({username: args.username});
+    try {
+        const user = await User.findOne({username: args.username});
 
-    if(user) throw new Error('user with this username already exist')
-    else {
+        if(user) throw new Error('user with this username already exist');
+        else {
+            const pass = bcryptjs.hashSync(args.password, salt)
 
-        let pass = bcryptjs.hashSync(args.password, salt)
+            return await User.create({
+                username: args.username,
+                password: pass
+            })
+        }
 
-        const newUser = User.create({
-            username: args.username,
-            password: pass
-        })
-
-        return newUser
+    } catch (error) {
+        throw new Error(error.message);
     }
-
-  } catch (error) {
-    throw new Error(error.message);
-  }
 };
 
 const resolver = { [mutationName]: resolverFunction };

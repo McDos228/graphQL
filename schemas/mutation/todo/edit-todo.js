@@ -1,5 +1,7 @@
 const TypeTodo = require("../../types/todo");
 const Todo = require('../../../models/Todo');
+const { isAuth } = require('../../../services/auth/');
+const { combineResolvers } = require('../../../services/resolversChain');
 
 const documentation = '"""edit todo item by given id"""';
 
@@ -21,6 +23,6 @@ const resolverFunction = async (parentValue, args, ctx, info) => {
   }
 };
 
-const resolver = { [mutationName]: resolverFunction };
+const resolver = { [mutationName]: combineResolvers(isAuth, resolverFunction) };
 
 module.exports = { resolver, mutation };
