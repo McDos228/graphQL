@@ -1,4 +1,3 @@
-const { gql } = require("apollo-server-express");
 const { MutationDefs } = require('../mutation/mutations');
 const { QueryDefs } = require('../queries/queries');
 

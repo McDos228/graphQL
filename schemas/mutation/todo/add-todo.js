@@ -14,9 +14,6 @@ const mutation = `${documentation} ${mutationName} (
 
 const resolverFunction = async (parentValue, args, ctx, info) => {
   try {
-
-    console.log(args.title, 'mutation')
-
     const dbItem = await Todo.findOne({title: args.title});
     if(dbItem) throw new Error('item with this name already exsist'); 
     return await Todo.create(args);

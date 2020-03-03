@@ -9,7 +9,7 @@ isAuth = async (root, args, context, info) => {
 }
 
 jwtDecode = async token => {
-    jwt.verify(token, SECRET, async (err, decode) => {
+    return jwt.verify(token, SECRET, async (err, decode) => {
         if(err) throw new Error(err);
         const user = await User.findOne({username: decode.username});
         if(user) 
@@ -17,7 +17,7 @@ jwtDecode = async token => {
                user: user.username
             }
         else
-            throw new Error('You are not authorized');
+            throw new Error('Invalid username');
     })
 };
 

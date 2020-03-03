@@ -17,9 +17,7 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 const apolloServer = new ApolloServer({
     schema,
     context,
-    typeDefs,
-    formatError,
-    uploads: false,    
+    formatError,   
     playground: {
         endpoint: PLAYGROUND_URL
     },

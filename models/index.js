@@ -13,19 +13,4 @@ fs
         
     });
 
-console.log(db, '11')
-
 module.exports = db;
-
-
-// const User = require('./User');
-// const Todo = require('./Todo');
-
-// module.exports = [
-//     {
-//         modelName: 'User', model: User
-//     },
-//     {
-//         modelName: 'Todo', model: Todo
-//     }
-// ]
