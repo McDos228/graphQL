@@ -13,13 +13,13 @@ const mutation = `${documentation} ${mutationName} (
 ): ${TypeTodo.type}`;
 
 const resolverFunction = async (parentValue, args, ctx, info) => {
-  try {
-    const dbItem = await Todo.findOne({title: args.title});
-    if(dbItem) throw new Error('item with this name already exsist'); 
-    return await Todo.create(args);
-  } catch (error) {
-    throw new Error(error.message);
-  }
+    try {
+        const dbItem = await Todo.findOne({title: args.title});
+        if(dbItem) throw new Error('item with this name already exsist'); 
+        return await Todo.create(args);
+    } catch (error) {
+        throw new Error(error.message);
+    }
 };
 
 const resolver = { [mutationName]: combineResolvers(isAuth, resolverFunction) };
